@@ -1,0 +1,87 @@
+def registrar_productos():
+    productos = []
+
+
+    try:
+        cantidad = int(input("\nIngrese cuantos productos se registrarán: "))
+    except ValueError:
+        print("\nDato inválido: tiene que ser un número entero.")
+        return []
+
+    for producto in range(cantidad):
+
+
+        #Validación de nombre
+        while True:
+            nombre = input("\nIngrese el nombre del producto: ").strip()
+            if nombre:
+                break
+            print("\nEl nombre no puede estar vacío.")
+
+        #Validación de categoría
+        while True:
+            categoria = input("\nIngrese la categoría del producto: ").strip()
+            if categoria:
+                break
+            print("\nLa categoria no puede estar vacía.")
+
+        #Validación de precio
+        while True:
+            try:
+                precio = float(input("\nIngrese el precio del producto: "))
+                if precio > 0:
+                    break
+                else:
+                    print("\nTiene que ser un numero mayor a 0.")
+            except ValueError:
+                print("\nDato inválido: tiene que ser un número decimal.")
+
+        #Validacion de cantidad en stock
+        while True:
+            try:
+                cantidad_stock = int(input("\nIngresa la cantidad en stock del producto: "))
+                if cantidad_stock >= 0:
+                    break
+                else:
+                    print("\nEl número tiene que ser mayor o igual a 0")
+            except ValueError:
+                print("\nDato inválido: tiene que ser un número entero.")
+
+
+
+        productos.append({"nombre": nombre, "categoria": categoria, "precio": precio, "cantidad en stock": cantidad_stock})
+
+    def analizar_productos(productos):
+        
+        print("\n-----Análisis de productos-----")
+        print("\nCantidad de productos que se registraron: ", len(productos))
+
+        suma_inventario = 0
+        
+        for producto in productos:
+            valor = producto["precio"] * producto["cantidad en stock"]
+            suma_inventario += valor
+            print("\nValor total en inventario de ", producto["nombre"], " es: ", suma_inventario)
+
+        mas_productos_registrados = max(productos, key=lambda producto: producto["cantidad en stock"])
+        print("\nLa categoría con más productos registrados es: ", mas_productos_registrados["categoria"])
+
+        producto_mas_caro = max(productos, key=lambda producto: producto["precio"])
+        print("\nEl producto más caro es: ", producto_mas_caro["nombre"])
+
+        print("\n-----Registro de productos-----\n")
+        def guardar_en_archivo(productos):
+
+            with open("inventario.txt", "w") as archivo:
+                for producto in productos:
+                    linea = f"{producto['nombre']}-{producto['categoria']}-{producto['precio']}-{producto['cantidad en stock']}"
+                    archivo.write(linea)
+
+            with open("inventario.txt", "r") as archivo:
+                for linea in archivo:
+                    registro = linea.split("-")
+                    print(registro)
+    
+        guardar_en_archivo(productos)
+    analizar_productos(productos)
+registrar_productos()
